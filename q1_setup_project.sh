@@ -9,7 +9,8 @@ chmod +x q1_setup_project.sh
 #   - data/
 #   - output/
 #   - reports/
-mkdir -p data output reports
+mkdir -p data reports
+mkdir output
 # TODO: Generate the dataset
 #       Run: python3 generate_data.py
 #       This creates data/clinical_trial_raw.csv with 10,000 patients
