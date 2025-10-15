@@ -158,6 +158,7 @@ if __name__ == '__main__':
     # Example:
     config = parse_config('q2_config.txt')
     validation = validate_config(config)
+    print(validation)
     generate_sample_data('data/sample_data.csv', config)
     # 
     # TODO: Read the generated file and calculate statistics
