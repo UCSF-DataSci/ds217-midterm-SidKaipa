@@ -1,4 +1,5 @@
-# TODO: Add shebang line: #!/usr/bin/env python3
+# TODO: Add shebang line: 
+#!/usr/bin/env python3
 # Assignment 5, Question 3: Data Utilities Library
 # Core reusable functions for data loading, cleaning, and transformation.
 #
@@ -23,7 +24,8 @@ def load_data(filepath: str) -> pd.DataFrame:
         >>> df.shape
         (10000, 18)
     """
-    pass
+    return pd.read_csv(filepath)
+
 
 
 def clean_data(df: pd.DataFrame, remove_duplicates: bool = True,
@@ -42,7 +44,11 @@ def clean_data(df: pd.DataFrame, remove_duplicates: bool = True,
     Example:
         >>> df_clean = clean_data(df, sentinel_value=-999)
     """
-    pass
+    df_use = df.copy()
+    if remove_duplicates:
+        df_use = df_use.drop_duplicates()
+    df_use = df_use.replace(sentinel_value, np.nan)
+    return df_use
 
 
 def detect_missing(df: pd.DataFrame) -> pd.Series:
@@ -60,8 +66,10 @@ def detect_missing(df: pd.DataFrame) -> pd.Series:
         >>> missing['age']
         15
     """
-    pass
 
+    return df.isna().sum()
+
+    
 
 def fill_missing(df: pd.DataFrame, column: str, strategy: str = 'mean') -> pd.DataFrame:
     """
@@ -78,7 +86,19 @@ def fill_missing(df: pd.DataFrame, column: str, strategy: str = 'mean') -> pd.Da
     Example:
         >>> df_filled = fill_missing(df, 'age', strategy='median')
     """
-    pass
+    df_copy = df.copy()
+    if strategy == 'mean':
+        avg = df_copy[column].mean()
+        df_copy[column] = df_copy[column].fillna(avg)
+    elif strategy == 'median':
+        med = df_copy[column].median()
+        df_copy[column] = df_copy[column].fillna(med)
+    elif strategy == 'ffill':
+        df_copy[column] = df_copy[column].fillna(method='ffill')
+    return df_copy
+
+    
+
 
 
 def filter_data(df: pd.DataFrame, filters: list) -> pd.DataFrame:
@@ -111,7 +131,29 @@ def filter_data(df: pd.DataFrame, filters: list) -> pd.DataFrame:
         >>> filters = [{'column': 'age', 'condition': 'in_range', 'value': [18, 65]}]
         >>> df_filtered = filter_data(df, filters)
     """
-    pass
+    df_copy = df.copy()
+    for filter in filters:
+        col = filter["column"]
+        cond = filter["condition"]
+        val = filter["value"]
+        if cond == "equals":
+            df_copy = df_copy[df_copy[col] == val]
+        elif cond == "greater_than":
+            df_copy = df_copy[df_copy[col] > val]
+        elif cond == "less_than":
+            df_copy = df_copy[df_copy[col] < val]
+        elif cond == "in_range":
+            df_copy = df_copy[df_copy[col].between(val[0],val[1])]
+        elif cond == "in_list":
+            df_copy = df_copy[df_copy[col].isin(val)]
+    return df_copy
+        
+            
+            
+
+
+
+    
 
 
 def transform_types(df: pd.DataFrame, type_map: dict) -> pd.DataFrame:
@@ -134,7 +176,18 @@ def transform_types(df: pd.DataFrame, type_map: dict) -> pd.DataFrame:
         ... }
         >>> df_typed = transform_types(df, type_map)
     """
-    pass
+    df_copy = df.copy()
+    for key,val in type_map.items():
+        if val == "datetime":
+            df_copy[key] = pd.to_datetime(df_copy[key])
+        elif val == "numeric":
+            df_copy[key] = pd.to_numeric(df_copy[key])
+        elif val == "category":
+            df_copy[key] = df_copy[key].astype("category")
+        elif val == "string":
+            df_copy[key] = df_copy[key].astype(str)
+    return df_copy  
+
 
 
 def create_bins(df: pd.DataFrame, column: str, bins: list,
@@ -160,7 +213,11 @@ def create_bins(df: pd.DataFrame, column: str, bins: list,
         ...     labels=['<18', '18-34', '35-49', '50-64', '65+']
         ... )
     """
-    pass
+    df_copy = df.copy()
+    if new_column is None:
+        new_column = f"{column}_binned"
+    df_copy[new_column] = pd.cut(df_copy[column], bins=bins, labels=labels)
+    return df_copy
 
 
 def summarize_by_group(df: pd.DataFrame, group_col: str,
@@ -188,7 +245,14 @@ def summarize_by_group(df: pd.DataFrame, group_col: str,
         ...     {'age': ['mean', 'std'], 'bmi': 'mean'}
         ... )
     """
-    pass
+    df_copy = df.copy()
+    grouped = df_copy.groupby(group_col)
+    if agg_dict is None:
+        summary = grouped.describe()
+    else:
+        summary = grouped.agg(agg_dict)
+    return summary
+
 
 
 
@@ -208,6 +272,7 @@ if __name__ == '__main__':
     
     # TODO: Add simple test example here
     # Example:
-    # test_df = pd.DataFrame({'age': [25, 30, 35], 'bmi': [22, 25, 28]})
-    # print("Test DataFrame created:", test_df.shape)
-    # print("Test detect_missing:", detect_missing(test_df))
+    test_df = pd.DataFrame({'age': [25, 30, 35], 'bmi': [22, 25, 28]})
+    print("Test DataFrame created:", test_df.shape)
+    print("Test detect_missing:", detect_missing(test_df))
+    
