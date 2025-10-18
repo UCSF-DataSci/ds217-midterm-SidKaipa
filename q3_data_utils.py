@@ -179,9 +179,9 @@ def transform_types(df: pd.DataFrame, type_map: dict) -> pd.DataFrame:
     df_copy = df.copy()
     for key,val in type_map.items():
         if val == "datetime":
-            df_copy[key] = pd.to_datetime(df_copy[key])
+            df_copy[key] = pd.to_datetime(df_copy[key], errors='coerce', infer_datetime_format=True)
         elif val == "numeric":
-            df_copy[key] = pd.to_numeric(df_copy[key])
+            df_copy[key] = pd.to_numeric(df_copy[key], errors='coerce')
         elif val == "category":
             df_copy[key] = df_copy[key].astype("category")
         elif val == "string":
