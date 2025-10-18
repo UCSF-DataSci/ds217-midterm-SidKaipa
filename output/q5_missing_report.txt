@@ -1,0 +1,21 @@
+Missing Data Report:
+
+                    missing counts  percentage of missing values
+patient_id                       0                          0.00
+age                              0                          0.00
+sex                              0                          0.00
+bmi                            438                          4.38
+enrollment_date                  0                          0.00
+systolic_bp                    414                          4.14
+diastolic_bp                   414                          4.14
+cholesterol_total              554                          5.54
+cholesterol_hdl                554                          5.54
+cholesterol_ldl                554                          5.54
+glucose_fasting                369                          3.69
+site                             0                          0.00
+intervention_group               0                          0.00
+follow_up_months                 0                          0.00
+adverse_events                   0                          0.00
+outcome_cvd                      0                          0.00
+adherence_pct                 1467                         14.67
+dropout                          0                          0.00
