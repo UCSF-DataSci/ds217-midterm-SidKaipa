@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+import sys
+import os
+sys.path.append(os.getcwd()) 
+
 """
 Assignment 5: Midterm Exam - Test Suite
 Tests for clinical trial data processing pipeline.
