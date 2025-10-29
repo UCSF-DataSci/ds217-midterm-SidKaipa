@@ -1,4 +1,3 @@
-# TODO: Add shebang line: 
 #!/usr/bin/env python3
 import random
 
